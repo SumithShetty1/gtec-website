@@ -27,57 +27,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    // ========== CONTACT FORM HANDLING (from script.js) ==========
-    const contactForm = document.getElementById('contactForm');
-    const formMsg = document.getElementById('formMsg');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                course: document.getElementById('course').value,
-                message: document.getElementById('message').value
-            };
-            
-            // Simple validation
-            if (!formData.name || !formData.email || !formData.phone) {
-                showMessage('Please fill in all required fields', 'error');
-                return;
-            }
-            
-            // Show success message
-            showMessage('Thank you! Your enquiry has been submitted. We will contact you within 24 hours.', 'success');
-            
-            // In a real application, you would send the data to a server here
-            // Example: sendFormData(formData);
-            
-            // Reset form
-            contactForm.reset();
-            
-            // Log to console (for demo)
-            console.log('Form submitted:', formData);
-        });
-    }
-    
-    // Function to show form messages
-    function showMessage(text, type) {
-        if (!formMsg) return;
-        
-        formMsg.textContent = text;
-        formMsg.className = 'form-message ' + type;
-        
-        // Remove message after 5 seconds
-        setTimeout(() => {
-            formMsg.textContent = '';
-            formMsg.className = 'form-message';
-        }, 5000);
-    }
-    
     // ========== SCROLL ANIMATIONS (Enhanced from all files) ==========
     function initScrollAnimations() {
         const animateElements = document.querySelectorAll('.animate-fade, .animate-left, .animate-right');
@@ -370,31 +319,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-// ========== UTILITY FUNCTIONS ==========
-
-// Utility function to send form data (for future implementation)
-async function sendFormData(formData) {
-    try {
-        // This is where you would send data to your backend
-        // const response = await fetch('/api/contact', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(formData)
-        // });
-        
-        // const result = await response.json();
-        // return result;
-        
-        // For now, simulate a successful submission
-        return { success: true, message: 'Form submitted successfully' };
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        return { success: false, message: 'Error submitting form' };
-    }
-}
-
 // ========== DYNAMIC CSS (from script.js) ==========
 const style = document.createElement('style');
 style.textContent = `
@@ -451,7 +375,7 @@ style.textContent = `
             top: 100%;
             left: 0;
             width: 100%;
-            background: var(--primary-blue);
+            background: white;
             padding: 1rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             z-index: 1000;

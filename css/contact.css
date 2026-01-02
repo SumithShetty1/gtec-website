@@ -203,6 +203,7 @@
 
 @media (max-width: 992px) {
     .carousel-hero {
+        margin-top: 0;
         height: 75vh;
         min-height: 500px;
     }
@@ -243,6 +244,7 @@
 
 @media (max-width: 768px) {
     .carousel-hero {
+        margin-top: 0;
         height: 70vh;
         min-height: 450px;
         margin-top: 70px;
@@ -284,6 +286,7 @@
 
 @media (max-width: 576px) {
     .carousel-hero {
+        margin-top: 0;
         height: 65vh;
         min-height: 400px;
     }
@@ -326,6 +329,7 @@
 
 @media (max-width: 480px) {
     .carousel-hero {
+        margin-top: 0;
         height: 60vh;
         min-height: 350px;
     }
