@@ -203,7 +203,7 @@
 
 @media (max-width: 992px) {
     .carousel-hero {
-        margin-top: 0;
+        margin-top: 55px;
         height: 75vh;
         min-height: 500px;
     }
@@ -244,7 +244,7 @@
 
 @media (max-width: 768px) {
     .carousel-hero {
-        margin-top: 0;
+        margin-top: 55px;
         height: 70vh;
         min-height: 450px;
         margin-top: 70px;
@@ -286,7 +286,7 @@
 
 @media (max-width: 576px) {
     .carousel-hero {
-        margin-top: 0;
+        margin-top: 55px;
         height: 65vh;
         min-height: 400px;
     }
@@ -329,7 +329,7 @@
 
 @media (max-width: 480px) {
     .carousel-hero {
-        margin-top: 0;
+        margin-top: 55px;
         height: 60vh;
         min-height: 350px;
     }
@@ -630,12 +630,6 @@
     padding: 6rem 5%;
 }
 
-.contact-form-map-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 3rem;
-    align-items: start;
-}
 
 .contact-form-container,
 .map-container {
@@ -746,7 +740,6 @@
     font-weight: 600;
     transition: var(--transition);
     flex: 1;
-    min-width: 200px;
     justify-content: center;
 }
 
@@ -866,6 +859,27 @@
 @media (max-width: 480px) {
     .contact-info-section {
         padding: 3rem 4%;
+    }
+
+    .map-wrapper iframe {
+        display: none;
+    }
+
+    .location-details {
+        display: none;
+    }
+
+    .contact-form-map-section {
+        padding: 3rem 4%;
+    }
+
+    .faq-section {
+        padding: 3rem 4%;
+    }
+
+    .faq-grid {
+        display: flex;
+        flex-direction: column;
     }
 
     .contact-actions {

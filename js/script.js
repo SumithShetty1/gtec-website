@@ -3,34 +3,60 @@
 console.log("G-TEC Computer Education Website Loaded");
 
 // DOM Ready Function
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // ========== MOBILE MENU TOGGLE (Enhanced from all files) ==========
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ========== MOBILE MENU TOGGLE ==========
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('nav');
-    
+
     if (mobileMenuBtn && nav) {
-        mobileMenuBtn.addEventListener('click', function() {
+        mobileMenuBtn.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevent event bubbling
+
+            // Toggle the active class on nav
             nav.classList.toggle('active');
-            nav.classList.toggle('show'); // Keep compatibility with script.js
-            this.innerHTML = nav.classList.contains('active') 
-                ? '<i class="fas fa-times"></i>' 
-                : '<i class="fas fa-bars"></i>';
-        });
-        
-        // Close menu when clicking outside (from index.js & courses.js)
-        document.addEventListener('click', function(event) {
-            if (!nav.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
-                nav.classList.remove('active', 'show');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+
+            // Toggle the icon
+            const icon = this.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
             }
         });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function (event) {
+            if (nav.classList.contains('active') &&
+                !nav.contains(event.target) &&
+                !mobileMenuBtn.contains(event.target)) {
+                nav.classList.remove('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                if (icon) {
+                    icon.className = 'fas fa-bars';
+                }
+            }
+        });
+
+        // Close menu when clicking on a nav link (for mobile)
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 768) {
+                    nav.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-bars';
+                    }
+                }
+            });
+        });
     }
-    
+
     // ========== SCROLL ANIMATIONS (Enhanced from all files) ==========
     function initScrollAnimations() {
         const animateElements = document.querySelectorAll('.animate-fade, .animate-left, .animate-right');
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -43,10 +69,10 @@ document.addEventListener("DOMContentLoaded", function() {
             threshold: 0.1,
             rootMargin: '0px 0px -100px 0px'
         });
-        
+
         animateElements.forEach(el => {
             el.style.opacity = '0';
-            
+
             // Apply initial transforms based on animation class (from courses.js)
             if (el.classList.contains('animate-left')) {
                 el.style.transform = 'translateX(-50px)';
@@ -55,58 +81,58 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 el.style.transform = 'translateY(30px)';
             }
-            
+
             el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
             observer.observe(el);
         });
-        
+
         // Stagger animations for course cards (from courses.js)
         const courseCards = document.querySelectorAll('.category-card');
         courseCards.forEach((card, index) => {
             card.style.animationDelay = `${index * 0.1}s`;
         });
     }
-    
+
     // Initialize animations
     initScrollAnimations();
-    
+
     // ========== PREMIUM CAROUSEL (from index.js & courses.js) ==========
     const carouselSlides = document.querySelectorAll('.carousel-slide');
     const carouselDots = document.querySelectorAll('.carousel-dot');
     const prevBtn = document.querySelector('.carousel-arrow.prev');
     const nextBtn = document.querySelector('.carousel-arrow.next');
-    
+
     if (carouselSlides.length > 0) {
         let currentSlide = 0;
         let slideInterval;
         const slideDuration = 5000; // 5 seconds per slide
-        
+
         // Initialize carousel
         function initCarousel() {
             updateCarousel();
             startAutoSlide();
-            
+
             // Event listeners for dots
             carouselDots.forEach(dot => {
-                dot.addEventListener('click', function() {
+                dot.addEventListener('click', function () {
                     const slideIndex = parseInt(this.getAttribute('data-slide'));
                     goToSlide(slideIndex);
                 });
             });
-            
+
             // Event listeners for arrows
             if (prevBtn) prevBtn.addEventListener('click', prevSlide);
             if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-            
+
             // Pause on hover
             const carouselContainer = document.querySelector('.carousel-container');
             if (carouselContainer) {
                 carouselContainer.addEventListener('mouseenter', pauseAutoSlide);
                 carouselContainer.addEventListener('mouseleave', startAutoSlide);
             }
-            
+
             // Keyboard navigation
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'ArrowLeft') prevSlide();
                 if (e.key === 'ArrowRight') nextSlide();
                 if (e.key === ' ') {
@@ -115,26 +141,26 @@ document.addEventListener("DOMContentLoaded", function() {
                     setTimeout(startAutoSlide, 3000);
                 }
             });
-            
+
             // Touch/swipe support
             let touchStartX = 0;
             let touchEndX = 0;
-            
+
             const carouselHero = document.querySelector('.carousel-hero');
             if (carouselHero) {
-                carouselHero.addEventListener('touchstart', function(e) {
+                carouselHero.addEventListener('touchstart', function (e) {
                     touchStartX = e.changedTouches[0].screenX;
                     pauseAutoSlide();
                 });
-                
-                carouselHero.addEventListener('touchend', function(e) {
+
+                carouselHero.addEventListener('touchend', function (e) {
                     touchEndX = e.changedTouches[0].screenX;
                     handleSwipe();
                     startAutoSlide();
                 });
             }
         }
-        
+
         // Update carousel display
         function updateCarousel() {
             carouselSlides.forEach((slide, index) => {
@@ -143,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     slide.classList.add('active');
                 }
             });
-            
+
             carouselDots.forEach((dot, index) => {
                 dot.classList.remove('active');
                 if (index === currentSlide) {
@@ -151,63 +177,63 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         }
-        
+
         // Navigate to specific slide
         function goToSlide(index) {
             currentSlide = index;
             updateCarousel();
             resetAutoSlide();
         }
-        
+
         // Next slide
         function nextSlide() {
             currentSlide = (currentSlide + 1) % carouselSlides.length;
             updateCarousel();
             resetAutoSlide();
         }
-        
+
         // Previous slide
         function prevSlide() {
             currentSlide = (currentSlide - 1 + carouselSlides.length) % carouselSlides.length;
             updateCarousel();
             resetAutoSlide();
         }
-        
+
         // Auto-slide functions
         function startAutoSlide() {
             slideInterval = setInterval(nextSlide, slideDuration);
         }
-        
+
         function pauseAutoSlide() {
             clearInterval(slideInterval);
         }
-        
+
         function resetAutoSlide() {
             pauseAutoSlide();
             startAutoSlide();
         }
-        
+
         // Handle swipe gestures
         function handleSwipe() {
             const swipeThreshold = 50;
             if (touchEndX < touchStartX - swipeThreshold) nextSlide();
             if (touchEndX > touchStartX + swipeThreshold) prevSlide();
         }
-        
+
         // Initialize the carousel
         initCarousel();
     }
-    
+
     // ========== COURSES PAGE SPECIFIC FUNCTIONALITY (from courses.js) ==========
-    
+
     // Smooth scroll for category navigation
     const categoryLinks = document.querySelectorAll('.category-nav-btn');
     categoryLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-            
+
             if (targetSection) {
                 window.scrollTo({
                     top: targetSection.offsetTop - 100,
@@ -216,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-    
+
     // Add active class to category navigation on scroll
     const courseSections = document.querySelectorAll('.course-section');
     if (courseSections.length > 0) {
@@ -224,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function() {
             threshold: 0.3,
             rootMargin: '-100px 0px -100px 0px'
         };
-        
+
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -238,50 +264,50 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         }, observerOptions);
-        
+
         courseSections.forEach(section => {
             sectionObserver.observe(section);
         });
     }
-    
+
     // ========== TESTIMONIAL SLIDER (from script.js) ==========
     function initTestimonialSlider() {
         const testimonialCards = document.querySelectorAll('.testimonial-card');
         if (testimonialCards.length <= 1) return;
-        
+
         let currentIndex = 0;
-        
+
         function showTestimonial(index) {
             testimonialCards.forEach(card => {
                 card.style.display = 'none';
             });
-            
+
             testimonialCards[index].style.display = 'block';
-            
+
             // Add fade animation
             testimonialCards[index].style.animation = 'fadeIn 0.8s ease-out';
         }
-        
+
         // Show first testimonial
         showTestimonial(currentIndex);
-        
+
         // Auto rotate testimonials every 5 seconds
         setInterval(() => {
             currentIndex = (currentIndex + 1) % testimonialCards.length;
             showTestimonial(currentIndex);
         }, 5000);
     }
-    
+
     // Initialize testimonial slider if exists
     if (document.querySelector('.testimonial-slider')) {
         initTestimonialSlider();
     }
-    
+
     // ========== SET ACTIVE NAV LINK (from script.js) ==========
     function setActiveNavLink() {
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         const navLinks = document.querySelectorAll('nav a');
-        
+
         navLinks.forEach(link => {
             const linkHref = link.getAttribute('href');
             if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
@@ -291,16 +317,16 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-    
+
     setActiveNavLink();
-    
+
     // ========== SMOOTH SCROLL FOR ANCHOR LINKS (from script.js) ==========
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            
+
             if (href === '#') return;
-            
+
             const targetElement = document.querySelector(href);
             if (targetElement) {
                 e.preventDefault();
@@ -311,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-    
+
     // ========== ADD CURRENT YEAR TO FOOTER (from script.js) ==========
     const yearElement = document.querySelector('.current-year');
     if (yearElement) {
